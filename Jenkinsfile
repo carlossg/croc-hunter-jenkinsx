@@ -23,7 +23,7 @@ pipeline {
             checkout scm
             container('go') {
               sh "make linux"
-              sh 'export VERSION=$PREVIEW_VERSION && export GIT_SHA=\${env.GIT_COMMIT} && skaffold run -f skaffold.yaml'
+              sh "export VERSION=\$PREVIEW_VERSION && export GIT_SHA=${env.GIT_COMMIT} && skaffold run -f skaffold.yaml"
             }
           }
           dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx/charts/preview') {
@@ -58,7 +58,7 @@ pipeline {
             dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx') {
               container('go') {
                 sh "make build"
-                sh 'export VERSION=`cat VERSION` && export GIT_SHA=\${env.GIT_COMMIT} && skaffold run -f skaffold.yaml'
+                sh "export VERSION=`cat VERSION` && export GIT_SHA=${env.GIT_COMMIT} && skaffold run -f skaffold.yaml"
               }
             }
           }
