@@ -7,6 +7,9 @@ build:
   artifacts:
   - imageName: changeme
     workspace: .
+    buildArgs:
+      GIT_SHA: "{{.GIT_SHA}}"
+      WORKFLOW_RELEASE: "{{.VERSION}}"
     docker: {}
   local: {}
 deploy:
