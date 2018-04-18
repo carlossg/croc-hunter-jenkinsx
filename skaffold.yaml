@@ -8,8 +8,8 @@ build:
   - imageName: changeme
     workspace: .
     buildArgs:
-      GIT_SHA: "{{.GIT_SHA}}"
-      WORKFLOW_RELEASE: "{{.VERSION}}"
+      GIT_SHA: xxxx
+      WORKFLOW_RELEASE: yyyy
     docker: {}
   local: {}
 deploy:
