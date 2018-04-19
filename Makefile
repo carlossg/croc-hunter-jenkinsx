@@ -60,7 +60,7 @@ ifeq ($(OS),Darwin)
 	sed -i "" -e "s/{{.VERSION}}/x$(VERSION)/" skaffold.yaml.new
 	sed -i "" -e "s/{{.GIT_COMMIT}}/$(GIT_COMMIT)/" skaffold.yaml.new
 else ifeq ($(OS),Linux)
-sed -i -e "s/{{.VERSION}}/$(VERSION)/" skaffold.yaml.new
+	sed -i -e "s/{{.VERSION}}/$(VERSION)/" skaffold.yaml.new
 	sed -i -e "s/{{.GIT_COMMIT}}/$(GIT_COMMIT)/" skaffold.yaml.new
 else
 	echo "platfrom $(OS) not supported to release from"
