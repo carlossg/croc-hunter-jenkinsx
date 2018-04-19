@@ -7,10 +7,10 @@ build:
   artifacts:
   - imageName: changeme
     workspace: .
-    buildArgs:
-      GIT_SHA: xxxx
-      WORKFLOW_RELEASE: yyyy
-    docker: {}
+    docker:
+      buildArgs:
+        GIT_SHA: "{{.GIT_SHA}}"
+        WORKFLOW_RELEASE: "{{.VERSION}}"
   local: {}
 deploy:
   kubectl:
