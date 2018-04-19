@@ -15,7 +15,7 @@ all: build
 
 check: fmt build test
 
-build:
+build: skaffold.yaml.new
 	CGO_ENABLED=$(CGO_ENABLED) $(GO) build -ldflags $(BUILDFLAGS) -o bin/$(NAME) $(MAIN_GO)
 
 test:
@@ -53,6 +53,20 @@ $(PKGS): $(GOLINT) $(FGT)
 	@go vet -v $@
 	@echo "TESTING"
 	@go test -v $@
+
+skaffold.yaml.new:
+	cp skaffold.yaml skaffold.yaml.new
+ifeq ($(OS),Darwin)
+	sed -i "" -e "s/{{.VERSION}}/x$(VERSION)/" skaffold.yaml.new
+	sed -i "" -e "s/{{.GIT_COMMIT}}/$(GIT_COMMIT)/" skaffold.yaml.new
+else ifeq ($(OS),Linux)
+sed -i -e "s/{{.VERSION}}/$(VERSION)/" skaffold.yaml.new
+	sed -i -e "s/{{.GIT_COMMIT}}/$(GIT_COMMIT)/" skaffold.yaml.new
+else
+	echo "platfrom $(OS) not supported to release from"
+	exit -1
+endif
+
 
 .PHONY: lint
 lint: vendor | $(PKGS) $(GOLINT) # ❷
