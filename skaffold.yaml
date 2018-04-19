@@ -9,8 +9,8 @@ build:
     workspace: .
     docker:
       buildArgs:
-        GIT_SHA: "{{.GIT_SHA}}"
-        WORKFLOW_RELEASE: "{{.VERSION}}"
+        GIT_SHA: "$GIT_COMMIT"
+        WORKFLOW_RELEASE: "$VERSION"
   local: {}
 deploy:
   kubectl:
