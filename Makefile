@@ -33,7 +33,7 @@ fmt:
 clean:
 	rm -rf build release
 
-linux:
+linux: skaffold.yaml.new
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 $(GO) build -ldflags $(BUILDFLAGS) -o bin/$(NAME) $(MAIN_GO)
 
 .PHONY: release clean
