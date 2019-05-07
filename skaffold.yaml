@@ -4,10 +4,6 @@ build:
   artifacts:
   - image: changeme
     context: .
-    docker:
-      buildArgs:
-        GIT_SHA: ''
-        WORKFLOW_RELEASE: '1'
   tagPolicy:
     envTemplate:
       template: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx:'
