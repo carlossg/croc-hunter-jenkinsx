@@ -19,5 +19,12 @@ spec:
     targetPort: {{ .Values.service.internalPort }}
     protocol: TCP
     name: http
+{{- if .Values.service.nodePort }}
+    nodePort: {{ .Values.service.nodePort }}
+{{- end }}
   selector:
+{{- if .Values.appLabel }}
+    app: {{ .Values.appLabel }}
+{{- else }}
     app: {{ template "fullname" . }}
+{{- end }}

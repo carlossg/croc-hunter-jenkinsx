@@ -32,3 +32,27 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 1
 terminationGracePeriodSeconds: 10
+canary:
+  enable: true
+  service:
+    hosts:
+    - croc-hunter.istio.us.g.csanchez.org
+    - croc-hunter.istio.eu.g.csanchez.org
+    gateways:
+    - jx-gateway.istio-system.svc.cluster.local
+  canaryAnalysis:
+    interval: 60s
+    threshold: 3
+    maxWeight: 50
+    stepWeight: 10
+    metrics:
+    - name: istio_requests_total
+      # minimum req success rate (non 5xx responses)
+      # percentage (0-100)
+      threshold: 99
+      interval: 60s
+    - name: istio_request_duration_seconds_bucket
+      # maximum req duration P99
+      # milliseconds
+      threshold: 500
+      interval: 60s

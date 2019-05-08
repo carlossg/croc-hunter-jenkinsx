@@ -1,12 +1,11 @@
 pipeline {
-    agent {
-        label "jenkins-go"
-    }
+    agent any
     environment {
       ORG               = 'carlossg'
       APP_NAME          = 'croc-hunter-jenkinsx'
       GIT_PROVIDER      = 'github.com'
       CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
+      SKAFFOLD_UPDATE_CHECK = 'false'
     }
     stages {
       stage('CI Build and push snapshot') {
@@ -19,21 +18,17 @@ pipeline {
           HELM_RELEASE = "$PREVIEW_NAMESPACE".toLowerCase()
         }
         steps {
-          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx') {
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless') {
             checkout scm
-            container('go') {
-              sh "make VERSION=\$PREVIEW_VERSION GIT_COMMIT=\$GIT_COMMIT linux"
-              sh 'export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml.new'
+            sh "make VERSION=\$PREVIEW_VERSION GIT_COMMIT=\$PULL_PULL_SHA linux"
+            sh 'export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml.new'
 
-
-              sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
-            }
+            sh "jx step validate --min-jx-version 1.2.36"
+            sh "jx step post build --image \$DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION"
           }
-          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx/charts/preview') {
-            container('go') {
-              sh "make preview"
-              sh "jx preview --app $APP_NAME --dir ../.."
-            }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/charts/preview') {
+            sh "make preview"
+            sh "jx preview --app $APP_NAME --dir ../.."
           }
         }
       }
@@ -42,32 +37,27 @@ pipeline {
           branch 'master'
         }
         steps {
-          container('go') {
-            dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx') {
-              checkout scm
-            }
-            dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx/charts/croc-hunter-jenkinsx') {
-                // ensure we're not on a detached head
-                sh "git checkout master"
-                // until we switch to the new kubernetes / jenkins credential implementation use git credentials store
-                sh "git config --global credential.helper store"
-
-                sh "jx step git credentials"
-            }
-            dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx') {
-              // so we can retrieve the version in later steps
-              sh "echo \$(jx-release-version) > VERSION"
-            }
-            dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx/charts/croc-hunter-jenkinsx') {
-              sh "make tag"
-            }
-            dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx') {
-              container('go') {
-                sh "make VERSION=`cat VERSION` GIT_COMMIT=\$GIT_COMMIT build"
-                sh "export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml.new"
-                sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)"
-              }
-            }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless') {
+            checkout scm
+          }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/charts/croc-hunter-jenkinsx') {
+            // until we switch to the new kubernetes / jenkins credential implementation use git credentials store
+            sh "git config --global credential.helper store"
+            sh "jx step validate --min-jx-version 1.1.73"
+            sh "jx step git credentials"
+          }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless') {
+            // so we can retrieve the version in later steps
+            sh "echo \$(jx-release-version) > VERSION"
+          }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/charts/croc-hunter-jenkinsx') {
+            sh "make tag"
+          }
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless') {
+            sh "make VERSION=`cat VERSION` GIT_COMMIT=\$PULL_BASE_SHA build"
+            sh "export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml.new"
+            sh "jx step validate --min-jx-version 1.2.36"
+            sh "jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)"
           }
         }
       }
@@ -76,23 +66,16 @@ pipeline {
           branch 'master'
         }
         steps {
-          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx/charts/croc-hunter-jenkinsx') {
-            container('go') {
-              sh 'jx step changelog --version v\$(cat ../../VERSION)'
+          dir ('/home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/charts/croc-hunter-jenkinsx') {
+            sh 'jx step changelog --version v\$(cat ../../VERSION) --generate-yaml=false'
 
-              // release the helm chart
-              sh 'jx step helm release'
+            // release the helm chart
+            sh 'make release'
 
-              // promote through all 'Auto' promotion Environments
-              sh 'jx promote -b --all-auto --timeout 1h --version \$(cat ../../VERSION)'
-            }
+            // promote through all 'Auto' promotion Environments
+            sh 'jx promote -b --all-auto --timeout 1h --version \$(cat ../../VERSION) --no-wait'
           }
         }
       }
-    }
-    post {
-        always {
-            cleanWs()
-        }
     }
   }

@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "fullname" . }}
@@ -7,11 +7,23 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      draft: {{ default "draft-app" .Values.draft }}
+{{- if .Values.appLabel }}
+      app: {{ .Values.appLabel }}
+{{- else }}
+      app: {{ template "fullname" . }}
+{{- end }}
   template:
     metadata:
       labels:
         draft: {{ default "draft-app" .Values.draft }}
+{{- if .Values.appLabel }}
+        app: {{ .Values.appLabel }}
+{{- else }}
         app: {{ template "fullname" . }}
+{{- end }}
 {{- if .Values.podAnnotations }}
       annotations:
 {{ toYaml .Values.podAnnotations | indent 8 }}
