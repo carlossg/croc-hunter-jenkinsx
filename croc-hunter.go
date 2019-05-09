@@ -2,20 +2,42 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
 
-var release = os.Getenv("WORKFLOW_RELEASE")
-var commit = os.Getenv("GIT_SHA")
-var powered = os.Getenv("POWERED_BY")
-var region = ""
+type Config struct {
+	Release string `json:"release"`
+	Commit  string `json:"commit"`
+	Powered string `json:"powered"`
+	Region  string
+}
+
+var config Config
+
+func LoadConfiguration(file string) Config {
+	f, err := filepath.Abs("config.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	var config Config
+	configFile, err := os.Open(f)
+	defer configFile.Close()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	jsonParser := json.NewDecoder(configFile)
+	jsonParser.Decode(&config)
+	return config
+}
 
 func main() {
 	httpListenAddr := flag.String("port", "8080", "HTTP Listen address.")
@@ -24,18 +46,19 @@ func main() {
 
 	log.Println("Starting server...")
 
-	log.Println("release: " + release)
-	log.Println("commit: " + commit)
-	log.Println("powered: " + powered)
+	config = LoadConfiguration("config.json")
+	log.Println("release: " + config.Release)
+	log.Println("commit: " + config.Commit)
+	log.Println("powered: " + config.Powered)
 
-	if release == "" {
-		release = "unknown"
+	if config.Release == "" {
+		config.Release = "unknown"
 	}
-	if commit == "" {
-		commit = "not present"
+	if config.Commit == "" {
+		config.Commit = "not present"
 	}
-	if powered == "" {
-		powered = "deis"
+	if config.Powered == "" {
+		config.Powered = "deis"
 	}
 	// get region
 
@@ -45,21 +68,22 @@ func main() {
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			log.Printf("could not get region: %s", err)
-		}
-		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			log.Printf("could not get region: %s", http.StatusText(resp.StatusCode))
-		}
-		body, err := ioutil.ReadAll(resp.Body)
-		resp.Body.Close()
-		if err != nil {
-			log.Printf("could not read region response: %s", err)
 		} else {
-			region = string(body)
+			if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+				log.Printf("could not get region: %s", http.StatusText(resp.StatusCode))
+			}
+			body, err := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				log.Printf("could not read region response: %s", err)
+			} else {
+				config.Region = string(body)
+			}
 		}
 	} else {
 		log.Printf("could not build region request: %s", err)
 	}
-	log.Printf("region: %s", region)
+	log.Printf("region: %s", config.Region)
 
 	// point / at the handler function
 	http.HandleFunc("/", handler)
@@ -129,5 +153,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("could not get hostname: %s", err)
 	}
 
-	fmt.Fprintf(w, html, hostname, region, release, commit, powered)
+	fmt.Fprintf(w, html, hostname, config.Region, config.Release, config.Commit, config.Powered)
 }

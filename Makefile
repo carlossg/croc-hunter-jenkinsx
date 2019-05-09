@@ -16,7 +16,7 @@ all: build
 
 check: fmt build test
 
-build: skaffold.yaml.new
+build: config.json
 	CGO_ENABLED=$(CGO_ENABLED) $(GO) build -ldflags $(BUILDFLAGS) -o bin/$(NAME) $(MAIN_GO)
 
 test: 
@@ -32,9 +32,9 @@ fmt:
 	@([[ ! -z "$(FORMATTED)" ]] && printf "Fixed unformatted files:\n$(FORMATTED)") || true
 
 clean:
-	rm -rf build release
+	rm -rf build release config.json
 
-linux: skaffold.yaml.new
+linux: config.json
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=linux GOARCH=amd64 $(GO) build -ldflags $(BUILDFLAGS) -o bin/$(NAME) $(MAIN_GO)
 
 .PHONY: release clean
@@ -55,21 +55,13 @@ $(PKGS): $(GOLINT) $(FGT)
 	@echo "TESTING"
 	@go test -v $@
 
-skaffold.yaml.new: skaffold.yaml
-ifeq ($(OS),Darwin)
-	sed -i "" -e "s/{{.VERSION}}/$(VERSION)/" skaffold.yaml
-	sed -i "" -e "s/{{.GIT_COMMIT}}/$(shell git rev-list -1 HEAD)/" skaffold.yaml
-else ifeq ($(OS),Linux)
-	sed -i -e "s/{{.VERSION}}/$(VERSION)/" skaffold.yaml
-	sed -i -e "s/{{.GIT_COMMIT}}/$(shell git rev-list -1 HEAD)/" skaffold.yaml
-else
-	echo "platfrom $(OS) not supported to release from"
-	exit -1
-endif
-	touch skaffold.yaml.new
+config.json:
+	echo "{ \"release\": \"$(VERSION)\"," > config.json
+	echo "  \"commit\": \"$(shell git rev-list -1 HEAD)\"," >> config.json
+	echo "  \"powered\": \"Jenkins X\" }" >> config.json
 
 
-.PHONY: lint
+.PHONY: lint config.json
 lint: vendor | $(PKGS) $(GOLINT) # ❷
 	@cd $(BASE) && ret=0 && for pkg in $(PKGS); do \
 	    test -z "$$($(GOLINT) $$pkg | tee /dev/stderr)" || ret=1 ; \
