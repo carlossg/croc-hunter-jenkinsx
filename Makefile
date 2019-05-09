@@ -56,11 +56,12 @@ $(PKGS): $(GOLINT) $(FGT)
 	@go test -v $@
 
 config.json:
-	echo "{ 'version': '$(VERSION)'," > config.json
-	echo "  'gitCommit': '$(shell git rev-list -1 HEAD)' }" >> config.json
+	echo "{ \"release\": \"$(VERSION)\"," > config.json
+	echo "  \"commit\": \"$(shell git rev-list -1 HEAD)\"," >> config.json
+	echo "  \"powered\": \"Jenkins X\" }" >> config.json
 
 
-.PHONY: lint
+.PHONY: lint config.json
 lint: vendor | $(PKGS) $(GOLINT) # ❷
 	@cd $(BASE) && ret=0 && for pkg in $(PKGS); do \
 	    test -z "$$($(GOLINT) $$pkg | tee /dev/stderr)" || ret=1 ; \

@@ -9,22 +9,27 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 )
 
 type Config struct {
 	Release string `json:"release"`
-	Commit string `json:"commit"`
+	Commit  string `json:"commit"`
 	Powered string `json:"powered"`
-	Region string
+	Region  string
 }
 
 var config Config
 
 func LoadConfiguration(file string) Config {
+	f, err := filepath.Abs("config.json")
+	if err != nil {
+		fmt.Println(err)
+	}
 	var config Config
-	configFile, err := os.Open(file)
+	configFile, err := os.Open(f)
 	defer configFile.Close()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -41,7 +46,7 @@ func main() {
 
 	log.Println("Starting server...")
 
-	config := LoadConfiguration("config.json")
+	config = LoadConfiguration("config.json")
 	log.Println("release: " + config.Release)
 	log.Println("commit: " + config.Commit)
 	log.Println("powered: " + config.Powered)
@@ -63,16 +68,17 @@ func main() {
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			log.Printf("could not get region: %s", err)
-		}
-		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-			log.Printf("could not get region: %s", http.StatusText(resp.StatusCode))
-		}
-		body, err := ioutil.ReadAll(resp.Body)
-		resp.Body.Close()
-		if err != nil {
-			log.Printf("could not read region response: %s", err)
 		} else {
-			config.Region = string(body)
+			if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+				log.Printf("could not get region: %s", http.StatusText(resp.StatusCode))
+			}
+			body, err := ioutil.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				log.Printf("could not read region response: %s", err)
+			} else {
+				config.Region = string(body)
+			}
 		}
 	} else {
 		log.Printf("could not build region request: %s", err)
