@@ -6,7 +6,7 @@ build:
     context: .
   tagPolicy:
     envTemplate:
-      template: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx:'
+      template: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx'
   local: {}
 deploy:
   kubectl: {}
