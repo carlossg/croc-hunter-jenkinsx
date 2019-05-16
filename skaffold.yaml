@@ -6,7 +6,7 @@ build:
     context: .
   tagPolicy:
     envTemplate:
-      template: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx:{{.VERSION}}'
+      template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx:{{.VERSION}}'
   local: {}
 deploy:
   kubectl: {}
@@ -17,7 +17,7 @@ profiles:
     - docker: {}
     tagPolicy:
       envTemplate:
-        template: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx'
+        template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx'
     local: {}
   deploy:
     helm:
@@ -25,5 +25,5 @@ profiles:
       - name: croc-hunter-jenkinsx
         chartPath: charts/croc-hunter-jenkinsx
         setValueTemplates:
-          image.repository: '{{.DOCKER_REGISTRY}}/carlossg/croc-hunter-jenkinsx'
+          image.repository: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx'
           image.tag: '{{.TAG}}'
