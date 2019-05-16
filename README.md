@@ -15,7 +15,6 @@ For example, if using GKE with cert-manager preinstalled for https certificates
 ```bash
 jx install \
     --provider=gke \
-    --domain=eu.g.csanchez.org \
     --tekton
 jx upgrade ingress
 ```
@@ -40,17 +39,13 @@ Or in [GKE StackDriver logs](https://console.cloud.google.com/logs/viewer?authus
 
 ```
 resource.type="container"
-resource.labels.cluster_name="samurainarrow"
+resource.labels.cluster_name="mycluster"
 resource.labels.container_name="build-step-jenkins"
 ```
 
 To [promote from staging to production](http://jenkins-x.io/developing/promote/) just run
 
     jx promote croc-hunter-jenkinsx --version 0.0.1 --env production
-
-Then delete the PR environments
-
-    jx delete env
 
 # Acknowledgements
 
