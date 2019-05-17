@@ -22,7 +22,7 @@ spec:
           number: 80
       weight: 50
     # - destination:
-    #     host: croc-hunter-jenkinsx.jx-carlossg-croc-hunter-jenkinsx-serverless-pr-35.svc.cluster.local
+    #     host: croc-hunter-jenkinsx.jx-carlossg-croc-hunter-jenkinsx-pr-35.svc.cluster.local
     #     port:
     #       number: 80
     #   weight: 50

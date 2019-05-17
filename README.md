@@ -23,7 +23,7 @@ Then fork this repo and [import it](http://jenkins-x.io/developing/import/)
 
 ```bash
 jx import \
-    --url https://github.com/GITHUB_USER/croc-hunter-jenkinsx-serverless \
+    --url https://github.com/GITHUB_USER/croc-hunter-jenkinsx \
     --no-draft \
     --pack=go
 ```
