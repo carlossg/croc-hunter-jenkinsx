@@ -4,7 +4,7 @@
 
 Install Istio and [Flagger](https://docs.flagger.app)
 
-    jx create addon istio
+    jx create addon istio --version 1.1.7
     jx create addon flagger
 
 Istio is enabled in the `jx-production` namespace for metrics gathering.
@@ -19,16 +19,12 @@ Add the [canary object](../charts/croc-hunter-jenkinsx/templates/canary.yaml) th
 
 Update the `values.yaml` section `canary.service.hosts` with the hostname for your aplication.
 
-Optional: Create a `ServiceEntry` to allow traffic to the Google metadata api to display the region
-
-    kubectl create -f ../istio/google-api.yaml
-
 ## Grafana Dashboard
 
     kubectl --namespace istio-system port-forward deploy/flagger-grafana 3000
 
 Access it at [http://localhost:3000](http://localhost:3000) using admin/admin
-Go to the `canary-analysis` dashboard and select
+Go to the `Istio Canary` dashboard and select
 
 * namespace: `jx-production`
 * primary: `jx-production-croc-hunter-jenkinsx-primary`
@@ -66,5 +62,5 @@ Generate delays and errors to show automatic rollbacks
 
 From a pod in the cluster (ie. a jx devpod) run
 
-    watch curl -sSL http://jx-production-croc-hunter-jenkinsx-canary.jx-production.svc.cluster.local:8080/delay?wait=5
-    watch curl -sSL http://jx-production-croc-hunter-jenkinsx-canary.jx-production.svc.cluster.local:8080/status?code=500
+    watch curl -sSL http://jx-croc-hunter-jenkinsx-canary.jx-production.svc.cluster.local:8080/delay?wait=5
+    watch curl -sSL http://jx-croc-hunter-jenkinsx-canary.jx-production.svc.cluster.local:8080/status?code=500
