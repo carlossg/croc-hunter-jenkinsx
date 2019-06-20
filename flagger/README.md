@@ -2,10 +2,9 @@
 
 ## Installation
 
-Install Istio, Prometheus and [Flagger](https://docs.flagger.app)
+Install Istio and [Flagger](https://docs.flagger.app)
 
     jx create addon istio
-    jx create addon prometheus
     jx create addon flagger
 
 Istio is enabled in the `jx-production` namespace for metrics gathering.
