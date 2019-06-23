@@ -1,15 +1,10 @@
-apiVersion: skaffold/v1beta11
+apiVersion: skaffold/v1beta2
 kind: Config
 build:
   artifacts:
   - image: changeme
-    kaniko:
-      buildContext:
-        localDir: {}
-      cache: {}
-  cluster:
-    pullSecretName: kaniko-secret
-    namespace: jx
+    context: .
+    docker: {}
   tagPolicy:
     envTemplate:
       template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx:{{.VERSION}}'
