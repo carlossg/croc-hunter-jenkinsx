@@ -3,6 +3,11 @@ pipelineConfig:
   pipelines:
     pullRequest:
       build:
+        preSteps:
+        - command: echo skaffold.yaml
         replace: true
         steps:
-        - command: export VERSION=$PREVIEW_VERSION && ls && skaffold build -f skaffold-temp.yaml
+        - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
+          env:
+          - name: ORG
+            value: go-exchange-staging
