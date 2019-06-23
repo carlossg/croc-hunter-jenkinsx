@@ -1,7 +1,9 @@
 buildPack: go
-pipelines:
-  pullRequest:
-    build:
-      steps:
-      - sh: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging && skaffold build -f skaffold.yaml
-        name: container-build
+pipelineConfig:
+  pipelines:
+    pullRequest:
+      build:
+        replace: true
+        steps:
+        - command: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging
+            && skaffold build -f skaffold.yaml
