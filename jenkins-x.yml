@@ -1,8 +1,8 @@
 buildPack: go
-# pipelineConfig:
-#   env:
-#   - name: ORG
-#     value: go-exchange-staging
+pipelineConfig:
+  env:
+  - name: ORG
+    value: go-exchange-staging
 #   pipelines:
 #     overrides:
 #     - pipeline: pullRequest
