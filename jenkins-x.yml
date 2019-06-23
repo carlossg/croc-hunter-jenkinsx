@@ -5,5 +5,4 @@ pipelineConfig:
       build:
         replace: true
         steps:
-        - command: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging
-            && skaffold build -f skaffold.yaml
+        - command: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging && skaffold build -f skaffold.yaml
