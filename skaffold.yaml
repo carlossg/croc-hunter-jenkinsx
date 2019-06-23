@@ -3,8 +3,13 @@ kind: Config
 build:
   artifacts:
   - image: changeme
-    context: .
-    docker: {}
+    kaniko:
+      buildContext:
+        localDir: {}
+      cache: {}
+  cluster:
+    pullSecretName: kaniko-secret
+    namespace: jx
   tagPolicy:
     envTemplate:
       template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx:{{.VERSION}}'
