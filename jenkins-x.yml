@@ -3,8 +3,6 @@ pipelineConfig:
   env:
   - name: ORG
     value: go-exchange-staging
-  - name: DOCKER_REGISTRY
-    value: asia.gcr.io
   pipelines:
     pullRequest:
       build:
