@@ -1,19 +1,25 @@
-buildPack: none
-pipelineConfig:
-  pipelines:
-    pullRequest:
-      pipeline:
-        agent:
-          image: docker.io/golang:stretch
-        stages:
-          - name: build-binary
-            steps:
-              - command: make
-                args:
-                  - build
-          - name: build-image
-            environment:
-              - name: ORG
-                value: go-exchange-staging
-            steps:
-              - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
+buildPack: go
+
+# buildPack: none
+# pipelineConfig:
+#   pipelines:
+#     pullRequest:
+#       pipeline:
+#         agent:
+#           image: docker.io/golang:stretch
+#         stages:
+#           - name: build-binary
+#             steps:
+#               - command: make
+#                 args:
+#                   - build
+#           - name: build-image
+#             environment:
+#               - name: ORG
+#                 value: go-exchange-staging
+#             agent:
+#               image: gcr.io/kaniko-project/executor:latest
+#             steps:
+#               - args: ["--dockerfile=./Dockerfile",
+#                         "--context=gs://<GCS bucket>/<path to .tar.gz>",
+#                         "--destination=<asia.gcr.io/$PROJECT/$IMAGE:$TAG>"]
