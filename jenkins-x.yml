@@ -1,4 +1,7 @@
-env:
-  - name: ORG
-    value: go-exchange-staging
 buildPack: go
+pipelines:
+  pullRequest:
+    build:
+      steps:
+      - sh: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging && skaffold build -f skaffold.yaml
+        name: container-build
