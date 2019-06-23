@@ -8,10 +8,11 @@ pipelineConfig:
       build:
         replace: true
         steps:
+        - command: make linux
         - env:
           - name: ORG
             value: go-exchange-staging
-          # command: make linux && VERSION=$PREVIEW_VERSION skaffold build -f skaffold.yaml
+          command: VERSION=$PREVIEW_VERSION skaffold build -f skaffold.yaml
       postBuild:
         replace: true
         steps:
