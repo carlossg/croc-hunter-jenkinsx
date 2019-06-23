@@ -14,8 +14,7 @@ profiles:
 - name: dev
   build:
     artifacts:
-    - docker: {}
-      image: changeme
+    - image: changeme
       context: .
     tagPolicy:
       envTemplate:
