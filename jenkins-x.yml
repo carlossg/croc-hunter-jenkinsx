@@ -1,13 +1,13 @@
 buildPack: go
-pipelineConfig:
-  env:
-  - name: ORG
-    value: go-exchange-staging
-  pipelines:
-    overrides:
-    - pipeline: pullRequest
-      stage: build
-      type: replace
-      steps:
-        - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
-          name: container-build
+# pipelineConfig:
+#   env:
+#   - name: ORG
+#     value: go-exchange-staging
+#   pipelines:
+#     overrides:
+#     - pipeline: pullRequest
+#       stage: build
+#       type: replace
+#       steps:
+#         - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
+#           name: container-build

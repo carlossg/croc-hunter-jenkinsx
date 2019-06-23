@@ -1,5 +1,5 @@
 FROM scratch
-EXPOSE 8080
+EXPOSE 9090
 ENTRYPOINT ["/croc-hunter-jenkinsx"]
 COPY config.json /
 COPY ./bin/ /
