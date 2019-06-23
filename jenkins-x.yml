@@ -1,8 +1,8 @@
 buildPack: go
 pipelineConfig:
   pipelines:
-    pullRequest:
-      build:
-        replace: true
-        steps:
-        - command: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging && skaffold build -f skaffold.yaml
+    overrides:
+    - pipeline: pullRequest
+      stage: build
+      steps:
+      - sh: export VERSION=$PREVIEW_VERSION && export ORG=go-exchange-staging && skaffold build -f skaffold.yaml
