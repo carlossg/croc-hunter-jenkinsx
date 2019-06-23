@@ -1,1 +1,5 @@
 buildPack: go
+pipelineConfig:
+  env:
+  - name: ORG
+    value: go-exchange-staging
