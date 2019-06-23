@@ -5,4 +5,4 @@ pipelineConfig:
       build:
         replace: true
         steps:
-        - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold-temp.yaml
+        - command: echo bla
