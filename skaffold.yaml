@@ -2,7 +2,7 @@ apiVersion: skaffold/v1beta1
 kind: Config
 build:
   artifacts:
-  - image: asia.gcr.io/go-exchange-staging/croc-hunter-jenkinsx
+  - image: changeme
     context: .
   tagPolicy:
     envTemplate:
