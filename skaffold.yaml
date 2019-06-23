@@ -4,6 +4,7 @@ build:
   artifacts:
   - image: changeme
     context: .
+    docker: {}
   tagPolicy:
     envTemplate:
       template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx:{{.VERSION}}'
@@ -13,9 +14,6 @@ deploy:
 profiles:
 - name: dev
   build:
-    artifacts:
-    - image: changeme
-      context: .
     tagPolicy:
       envTemplate:
         template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx'
