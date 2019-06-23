@@ -1,1 +1,4 @@
+env:
+  - name: GCP_PROJECT
+    value: go-exchange-staging
 buildPack: go
