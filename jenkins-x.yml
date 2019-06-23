@@ -4,8 +4,8 @@ pipelineConfig:
     pullRequest:
       build:
         preSteps:
-        - command: cat skaffold.yaml
-        # replace: true
+        - command: make linux
+        replace: true
         steps:
         - command: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
           env:
