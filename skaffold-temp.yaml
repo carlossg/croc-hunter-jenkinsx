@@ -1,0 +1,29 @@
+apiVersion: skaffold/v1beta1
+kind: Config
+build:
+  artifacts:
+  - image: changeme
+    context: .
+  tagPolicy:
+    envTemplate:
+      template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx:{{.VERSION}}'
+  local: {}
+deploy:
+  kubectl: {}
+profiles:
+- name: dev
+  build:
+    artifacts:
+    - docker: {}
+    tagPolicy:
+      envTemplate:
+        template: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx'
+    local: {}
+  deploy:
+    helm:
+      releases:
+      - name: croc-hunter-jenkinsx
+        chartPath: charts/croc-hunter-jenkinsx
+        setValueTemplates:
+          image.repository: '{{.DOCKER_REGISTRY}}/{{.ORG}}/croc-hunter-jenkinsx'
+          image.tag: '{{.TAG}}'
