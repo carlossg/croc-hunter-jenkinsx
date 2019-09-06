@@ -42,56 +42,32 @@ upserted Pipeline ********-croc-hunter-jenkinsx-m-1
 created PipelineRun ********-croc-hunter-jenkinsx-m-1
 created PipelineStructure ********-croc-hunter-jenkinsx-m-1
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-credential-initializer-8m7gm[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-credential-initializer-8m7gm[0m
 {"level":"warn","ts":1567774476.005438,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/master\" is not a valid GitHub commit ID"}
 {"level":"info","ts":1567774476.006113,"logger":"fallback-logger","caller":"creds-init/main.go:40","msg":"Credentials initialized."}
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-working-dir-initializer-rwhjr[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-working-dir-initializer-rwhjr[0m
 {"level":"warn","ts":1567774476.7566378,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: open /var/run/ko/HEAD: no such file or directory"}
 {"level":"info","ts":1567774476.7583892,"logger":"fallback-logger","caller":"bash/main.go:65","msg":"Successfully executed command \"mkdir -p /workspace/source /workspace/source/charts/croc-hunter-jenkinsx\""}
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-place-tools[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-place-tools[0m
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-git-source-carlossg-croc-hunter-jenkinsx-m-jw5tj[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-git-source-carlossg-croc-hunter-jenkinsx-m-jw5tj[0m
 {"level":"warn","ts":1567774703.296254,"logger":"fallback-logger","caller":"logging/config.go:69","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/master\" is not a valid GitHub commit ID"}
 {"level":"info","ts":1567774704.6009834,"logger":"fallback-logger","caller":"git/git.go:102","msg":"Successfully cloned https://github.com/********/croc-hunter-jenkinsx.git @ v0.0.60 in path /workspace/source"}
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-git-merge[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-git-merge[0m
 Using SHAs from PULL_REFS=master:deb6cc7357240774520fdb91e54502f4b52c28b4
 WARNING: no SHAs to merge, falling back to initial cloned commit
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-setup-jx-git-credentials[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-setup-jx-git-credentials[0m
 Generated Git credentials file /workspace/xdg_config/git/credentials
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-build-make-build[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-build-make-build[0m
 echo "{ \"release\": \"0.0.60\"," > config.json
 echo "  \"commit\": \"5c8cb04f06369fc87ea9ff6a77b07e920f806f59\"," >> config.json
 echo "  \"powered\": \"Jenkins X\" }" >> config.json
 CGO_ENABLED=0 GO15VENDOREXPERIMENT=1 go build -ldflags '' -o bin/croc-hunter-jenkinsx croc-hunter.go
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-build-container-build[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-build-container-build[0m
 [36mINFO[0m[0000] No base image, nothing to extract            
@@ -123,14 +99,8 @@ Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfro
 2019/09/06 12:58:45 pushed blob: sha256:26f5c453d7d6a303ddf47bfe3cb1d331abd07d33ae057bbdfa2c2815cf1cddf5
 2019/09/06 12:58:45 gcr.io/api-project-642841493686/croc-hunter-jenkinsx:0.0.60: digest: sha256:756ae0957921c98fb4d5cba82bb71e9840b28a274a7cff8f620a9c6a1a58785b size: 751
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-build-post-build[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-build-post-build[0m
 no CVE provider running in the current ** namespace so skip adding image to be analysed
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-promote-changelog[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-changelog[0m
 Converted /workspace/source/charts/croc-hunter-jenkinsx to an unshallow repository
@@ -142,9 +112,6 @@ Created Release croc-hunter-jenkinsx-0-0-60 resource in namespace **
 Updating PipelineActivity ********-croc-hunter-jenkinsx-master-1 with version 0.0.60
 Updated PipelineActivities ********-croc-hunter-jenkinsx-master-1 with release notes URL: https://github.com/********/croc-hunter-jenkinsx/releases/tag/v0.0.60
 
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-promote-helm-release[0m to start...
-
-
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-helm-release[0m
 WARNING: No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
 Adding missing Helm repo: storage.googleapis.com https://storage.googleapis.com/chartmuseum.jenkins-x.io
@@ -154,9 +121,6 @@ Successfully added Helm repository jenkins-x-chartmuseum.
 WARNING: No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
 Uploading chart file croc-hunter-jenkinsx-0.0.60.tgz to http://jenkins-x-chartmuseum:8080/api/charts
 Received 201 response: {"saved":true}
-
-waiting for stage [32mfrom-build-pack[0m : container [32mstep-promote-jx-promote[0m to start...
-
 
 Showing logs for build [32mmeta-carlossg-croc-hunter-jenki-1[0m stage [32mfrom-build-pack[0m and container [32mstep-promote-jx-promote[0m
 WARNING: prow based install so skip waiting for the merge of Pull Requests to go green as currently there is an issue with gettingstatuses from the PR, see https://github.com/jenkins-x/**/issues/2410
